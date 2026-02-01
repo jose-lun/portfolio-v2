@@ -4,6 +4,9 @@ export default function BackgroundGraph() {
   const canvasRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0, active: false });
   const rafRef = useRef(0);
+  const edgeRGBRef = useRef([150, 180, 255]);
+  const pointRGBRef = useRef([220, 230, 255]);
+
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -64,15 +67,47 @@ export default function BackgroundGraph() {
         return (x >>> 0) / 4294967296;
     }
 
+    function readTargetRGB(varName, fallback) {
+      const raw = getComputedStyle(document.documentElement)
+        .getPropertyValue(varName)
+        .trim();
+      const parts = raw.split(",").map((x) => Number(x.trim()));
+      if (parts.length !== 3 || parts.some((n) => Number.isNaN(n))) return fallback;
+      return parts;
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
 
     function drawFrame() {
       ctx.clearRect(0, 0, w, h);
 
       // subtle overlay so text stays readable
-      ctx.fillStyle = "rgba(57, 54, 54, 0.2)";
+      ctx.fillStyle = "rgba(54, 57, 57, 0.2)";
       ctx.fillRect(0, 0, w, h);
 
       const mouse = mouseRef.current;
+
+      // Smooth color transition toward target CSS vars
+      const edgeTarget = readTargetRGB("--graph-edge-target", [150, 180, 255]);
+      const pointTarget = readTargetRGB("--graph-point-target", [220, 230, 255]);
+
+
+      const edge = edgeRGBRef.current;
+      const point = pointRGBRef.current;
+
+      // smoothing factor: smaller = slower, bigger = faster
+      const t = 0.06;
+
+      edge[0] = lerp(edge[0], edgeTarget[0], t);
+      edge[1] = lerp(edge[1], edgeTarget[1], t);
+      edge[2] = lerp(edge[2], edgeTarget[2], t);
+
+      point[0] = lerp(point[0], pointTarget[0], t);
+      point[1] = lerp(point[1], pointTarget[1], t);
+      point[2] = lerp(point[2], pointTarget[2], t);
 
       for (const n of nodes) {
         n.x += n.vx;
@@ -139,9 +174,7 @@ export default function BackgroundGraph() {
             // Final alpha depends ONLY on mouse proximity (not on edge length)
             const alpha = 0.60 * mouseFactor;
 
-            const color = "rgba(30, 134, 126, 1)";
-
-            ctx.strokeStyle = `rgba(30, 134, 126, ${alpha})`;
+            ctx.strokeStyle = `rgba(${edge[0]}, ${edge[1]}, ${edge[2]}, ${alpha})`;
 
             ctx.lineWidth = 1.5;
             ctx.beginPath();
@@ -154,7 +187,7 @@ export default function BackgroundGraph() {
 
       // points
       for (const n of nodes) {
-        ctx.fillStyle = "rgba(220, 230, 255, 0.15)";
+        ctx.fillStyle = `rgba(${point[0]}, ${point[1]}, ${point[2]}, 0.05)`;
         ctx.beginPath();
         ctx.arc(n.x, n.y, 1.6, 0, Math.PI * 2);
         ctx.fill();
