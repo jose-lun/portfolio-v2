@@ -172,7 +172,7 @@ export default function BackgroundGraph() {
             mouseFactor = mouseFactor * mouseFactor;
 
             // Final alpha depends ONLY on mouse proximity (not on edge length)
-            const alpha = 0.60 * mouseFactor;
+            const alpha = 0.50 * mouseFactor;
 
             ctx.strokeStyle = `rgba(${edge[0]}, ${edge[1]}, ${edge[2]}, ${alpha})`;
 
