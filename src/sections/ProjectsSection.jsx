@@ -1,3 +1,4 @@
+import { href } from "react-router-dom";
 import Reveal from "../components/Reveal";
 
 const INTERACTIVE_LESSONS = [
@@ -7,6 +8,7 @@ const INTERACTIVE_LESSONS = [
     desc: "Cobweb plots, bifurcation diagrams, and intuition for period-doubling.",
     img: "https://picsum.photos/seed/chaos/900/700",
     type: "lesson",
+    href: "/lessons/logistic-map",
   },
   {
     title: "RL Racecar",

@@ -237,6 +237,204 @@ body {
   margin-bottom: 18px;
 }
 
+/* Lesson page layout */
+
+.lesson-page {
+  padding: 0 clamp(16px, 4vw, 48px);
+}
+
+.lesson-hero {
+  min-height: 80vh;
+  display: grid;
+  place-items: end center;   /* <-- key change */
+  text-align: center;
+  padding-bottom: 64px;      /* breathing room above first step */
+}
+
+
+.lesson-title {
+  margin: 0;
+  font-size: clamp(40px, 5vw, 64px);
+  letter-spacing: -0.02em;
+}
+
+.lesson-subtitle {
+  margin-top: 14px;
+  max-width: 720px;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.lesson-right {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  z-index: 1;
+  position: sticky;
+  top: 84px;
+  height: calc(100vh - 120px);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+/* Mobile: stack */
+@media (max-width: 900px) {
+  .lesson-flow.has-viz {
+    grid-template-columns: 1fr;
+  }
+  .lesson-right {
+    grid-column: 1;
+    grid-row: auto;
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 280px;
+    transition: opacity 220ms ease, transform 220ms ease;
+  }
+  .lesson-step,
+  .lesson-step.is-wide {
+    grid-column: 1;
+    max-width: 100%;
+  }
+}
+
+.lesson-flow.has-viz {
+  display: grid;
+  grid-template-columns: 1fr minmax(320px, 520px);
+  gap: clamp(18px, 4vw, 48px);
+  align-items: start;
+  padding-bottom: 80px;
+}
+
+.lesson-flow.has-viz .lesson-step.is-wide {
+  padding-right: min(520px, 40vw); /* reserve space where the viz lives */
+}
+
+
+.lesson-flow.no-viz {
+  display: block;
+  padding-bottom: 80px;
+}
+
+.lesson-flow.no-viz .lesson-step {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.lesson-flow.viz-collapsed .lesson-right {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+
+.lesson-step {
+  padding: 72px 0;
+  margin: 0;
+  opacity: 1;                 /* <-- default visible */
+  transform: none;            /* <-- default */
+  grid-column: 1;
+  max-width: 720px;
+}
+
+/* Only animate when it becomes visible (optional) */
+.lesson-step.is-visible {
+  animation: lessonFadeIn 600ms ease both;
+}
+
+@keyframes lessonFadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.lesson-step.is-wide {
+  grid-column: 1 / -1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 110px 0 160px;   /* <-- extra bottom spacing */
+  position: relative;
+  z-index: 2;               /* ensures it won't be covered */
+}
+
+.lesson-step.is-centered {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* Debug: show which step is active */
+.lesson-debug .lesson-step {
+  border-radius: 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.10);
+  padding: 36px 18px;
+}
+
+.lesson-debug .lesson-step.is-active {
+  border-color: rgba(120, 200, 255, 0.55);
+  background: rgba(120, 200, 255, 0.06);
+}
+
+.lesson-viz {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.lesson-viz-header {
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.lesson-viz-kicker {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+}
+
+.lesson-viz-title {
+  margin-top: 8px;
+  font-size: 18px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+}
+
+.lesson-viz-hint {
+  margin-top: 8px;
+  opacity: 0.75;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.lesson-viz-stage {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.lesson-viz-state {
+  font-size: 12px;
+  opacity: 0.7;
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.lesson-step p {
+  margin: 22px 0;
+  line-height: 1.75;
+  font-size: 17px;
+}
+
+
+
+
+
 
 
 
