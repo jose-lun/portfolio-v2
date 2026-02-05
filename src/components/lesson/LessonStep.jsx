@@ -18,25 +18,22 @@ export default function LessonStep({
 
     const obs = new IntersectionObserver(
       ([entry]) => {
-        // entry.boundingClientRect is relative to viewport
-        const r = entry.boundingClientRect;
-        const vh = window.innerHeight;
-
-        // We define three regions:
-        // pre: not reached yet
-        // in: overlaps center band
-        // out: passed above
-        const centerBandTop = vh * 0.25;
-        const centerBandBot = vh * 0.75;
-
-        const overlapsCenterBand = r.bottom > centerBandTop && r.top < centerBandBot;
-        const passedAbove = r.bottom <= centerBandTop;
-
-        if (overlapsCenterBand) el.dataset.phase = "in";
-        else if (passedAbove) el.dataset.phase = "out";
-        else el.dataset.phase = "pre";
+        // Simple approach: element is "in" when it's intersecting (visible)
+        if (entry.isIntersecting) {
+          el.dataset.phase = "in";
+        } else {
+          // Check if we've scrolled past it
+          if (entry.boundingClientRect.top < 0) {
+            el.dataset.phase = "out";
+          } else {
+            el.dataset.phase = "pre";
+          }
+        }
       },
-      { threshold: 0 }
+      { 
+        threshold: 0.1,
+        rootMargin: "-20% 0px -20% 0px"  // Triggers when element enters middle 60% of viewport
+      }
     );
 
     obs.observe(el);
@@ -45,9 +42,19 @@ export default function LessonStep({
 
   const cls = mode === "split" ? "lesson-step is-split" : "lesson-step is-centered";
 
+  // For split mode, wrap each child in lesson-fade separately to maintain grid
+  // For centered mode, wrap all children together
+  const content = mode === "split" 
+    ? Array.isArray(children) 
+      ? children.map((child, i) => (
+          <div key={i} className="lesson-fade">{child}</div>
+        ))
+      : <div className="lesson-fade">{children}</div>
+    : <div className="lesson-fade">{children}</div>;
+
   return (
     <section ref={ref} className={cls} data-phase="pre">
-      <div className="lesson-step-inner">{children}</div>
+      <div className="lesson-step-inner">{content}</div>
     </section>
   );
 }

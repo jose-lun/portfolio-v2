@@ -237,7 +237,6 @@ body {
   margin-bottom: 18px;
 }
 
-/* Lesson page layout */
 /* =========================
    LESSON ENGINE v1
    ========================= */
@@ -250,7 +249,7 @@ body {
 .lesson-hero {
   text-align: center;
   padding-top: 96px;
-  padding-bottom: 200px; /* small-ish gap before first step */
+  padding-bottom: 0px; /* small-ish gap before first step */
 }
 
 .lesson-title {
@@ -270,13 +269,13 @@ body {
 /* Step wrapper (shared) */
 .lesson-step {
   margin: 0 auto;
-  padding: 96px 0; /* vertical rhythm */
+  padding: 40px 0; /* vertical rhythm */
   max-width: 1000px;
 }
 
 /* Two layouts */
 .lesson-step.is-centered .lesson-step-inner {
-  max-width: 760px;
+  max-width: 90%;
   margin: 0 auto;
   text-align: center;
 }
@@ -318,6 +317,13 @@ body {
   will-change: opacity, transform;
 }
 
+/* Before view */
+.lesson-step[data-phase="pre"] .lesson-fade {
+  opacity: 0;
+  transform: translateY(18px);
+  pointer-events: none;
+}
+
 /* In view */
 .lesson-step[data-phase="in"] .lesson-fade {
   opacity: 1;
@@ -340,5 +346,15 @@ body {
   overflow: hidden;
   min-height: 280px;
 }
+
+/* KaTeX tweaks (optional) */
+.katex {
+  font-size: 1.05em;
+}
+
+.katex-display {
+  margin: 18px 0;
+}
+
 
 
