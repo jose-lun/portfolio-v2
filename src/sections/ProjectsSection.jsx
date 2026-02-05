@@ -3,7 +3,7 @@ import Reveal from "../components/Reveal";
 
 const INTERACTIVE_LESSONS = [
   {
-    title: "Chaos & the Logistic Map",
+    title: "The Logistic Map",
     tag: "Interactive Lesson",
     desc: "Cobweb plots, bifurcation diagrams, and intuition for period-doubling.",
     img: "https://picsum.photos/seed/chaos/900/700",

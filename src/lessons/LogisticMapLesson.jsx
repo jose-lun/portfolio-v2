@@ -2,44 +2,51 @@ import LessonPage from "../components/lesson/LessonPage";
 import LessonStep from "../components/lesson/LessonStep";
 import VizBox from "../components/lesson/VizBox";
 import Math from "../components/lesson/Math";
-import IterationSketch from "../sketches/logistic-map/IterationSketch";
-import BifurcationSketch from "../sketches/logistic-map/BifurcationSketch";
+import DoublePendulumSketch from "../sketches/logistic-map/DoublePendulumSketch";
+import ExponentialRabbitSketch from "../sketches/logistic-map/ExponentialRabbitSketch";
 
 export default function LogisticMapLesson() {
   return (
     <LessonPage
-      title="Chaos & the Logistic Map"
-      subtitle="How simple iteration creates order, oscillation, and chaos."
+      title="The Logistic Map"
+      subtitle="How a simple model of population growth leads to chaos."
     >
       <LessonStep mode="centered">
+        <h2>Part 1: Rabbits on an island</h2>
+      </LessonStep>
+      <LessonStep mode="left">
         <p>
-          We'll study a deceptively simple rule:
-          {" "}
-          <Math inline>{"x_{n+1} = r x_n (1 - x_n)"}</Math>.
+          Imagine a small island with plenty of grass and no predators. A group of rabbits arrives and starts to reproduce.
         </p>
         <p>
-          By changing <Math inline>{"r"}</Math>, we'll see stable behavior, oscillations,
-          and chaos.
+          Suppose that each month, each pair of rabbits produces a new pair.
         </p>
       </LessonStep>
 
       <LessonStep mode="split">
         <div>
-          <h2>Iteration</h2>
           <p>
-            Start with an initial value <Math inline>{"x_0"}</Math>. Apply the rule
-            repeatedly to get <Math inline>{"x_1, x_2, \\dots"}</Math>.
+            In this way the population doubles every month.
+          </p>
+          <p>
+            Try it for yourself! Click the "Next Generation" button to see the population grow.
+          </p>
+          <p>
+            As you can see, the population grows without bound, and the rate of growth is always increasing.
+          </p>
+          <p>
+            This is called <em>exponential growth</em>.
           </p>
         </div>
 
-        <VizBox title="Iteration Plot">
-          <IterationSketch width={480} height={320} r={3.2} />
+        <VizBox>
+          <ExponentialRabbitSketch/>
         </VizBox>
       </LessonStep>
 
       <LessonStep mode="split">
         <div>
-          <h2>The Bifurcation Diagram</h2>
+          <h2>The Double Pendulum</h2>
           <p>
             This diagram shows all possible long-term behaviors across different 
             values of <Math inline>{"r"}</Math>.
@@ -49,8 +56,8 @@ export default function LogisticMapLesson() {
           </p>
         </div>
 
-        <VizBox title="Bifurcation Diagram">
-          <BifurcationSketch width={480} height={320} />
+        <VizBox title="Double Pendulum">
+          <DoublePendulumSketch/>
         </VizBox>
       </LessonStep>
 
