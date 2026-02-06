@@ -269,13 +269,13 @@ body {
   max-width: 800px;
   opacity: 0.85;
   line-height: 1.6;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 /* Step wrapper (shared) */
 .lesson-step {
   margin: 0 auto;
-  padding: 20px 0; /* vertical rhythm */
+  padding: 15px 0; /* vertical rhythm */
   max-width: 1000px;
 }
 
@@ -297,7 +297,7 @@ body {
   display: grid;
   grid-template-columns: 1fr minmax(320px, 520px);
   gap: clamp(18px, 4vw, 48px);
-  align-items: start;
+  align-items: center;
 }
 
 /* Mobile stack */
@@ -307,36 +307,11 @@ body {
   }
 }
 
-/* Sticky split: left content scrolls through, right stays fixed */
-.lesson-step.is-sticky-split .lesson-step-inner {
-  display: grid;
-  grid-template-columns: 1fr minmax(320px, 520px);
-  gap: clamp(18px, 4vw, 48px);
-  align-items: start;
-}
-
-.lesson-step.is-sticky-split .lesson-step-inner > :last-child {
-  position: sticky;
-  top: 20vh;
-  align-self: start;
-}
-
-/* Mobile stack */
-@media (max-width: 900px) {
-  .lesson-step.is-sticky-split .lesson-step-inner {
-    grid-template-columns: 1fr;
-  }
-  
-  .lesson-step.is-sticky-split .lesson-step-inner > :last-child {
-    position: static;
-  }
-}
-
 /* Text formatting inside steps */
 .lesson-step p {
   margin: 22px 0;
   line-height: 1.75;
-  font-size: 17px;
+  font-size: 20px;
   opacity: 0.95;
 }
 
@@ -353,6 +328,17 @@ body {
   transform: translateY(18px);
   transition: opacity 450ms ease, transform 450ms ease;
   will-change: opacity, transform;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Before view */
@@ -392,6 +378,13 @@ body {
 
 .katex-display {
   margin: 18px 0;
+}
+
+.lesson-step ul,
+.lesson-step ol {
+  padding-left: 40px;
+  margin-left: 20px;
+  font-size: 20px;
 }
 
 

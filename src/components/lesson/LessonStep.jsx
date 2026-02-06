@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 export default function LessonStep({
   children,
   mode = "centered", // "centered" | "split"
+  style
 }) {
   const ref = useRef(null);
 
@@ -42,15 +43,13 @@ export default function LessonStep({
 
   const cls = mode === "split" 
     ? "lesson-step is-split"
-    : mode === "sticky-split"
-      ? "lesson-step is-sticky-split"
-      : mode === "left"
-        ? "lesson-step is-left"
-        : "lesson-step is-centered";
+    : mode === "left"
+      ? "lesson-step is-left"
+      : "lesson-step is-centered";
 
-  // For split mode, wrap each child in lesson-fade separately to maintain grid
-  // For centered mode, wrap all children together
-  const content = mode === "split" 
+  // For split/sticky-split mode, wrap each child in lesson-fade separately to maintain grid
+  // For centered/left mode, wrap all children together
+  const content = (mode === "split")
     ? Array.isArray(children) 
       ? children.map((child, i) => (
           <div key={i} className="lesson-fade">{child}</div>
@@ -59,7 +58,7 @@ export default function LessonStep({
     : <div className="lesson-fade">{children}</div>;
 
   return (
-    <section ref={ref} className={cls} data-phase="pre">
+    <section ref={ref} className={cls} data-phase="pre" style={style}>
       <div className="lesson-step-inner">{content}</div>
     </section>
   );

@@ -1,4 +1,5 @@
 import { useP5 } from "./useP5";
+import { useEffect } from "react";
 
 /**
  * Component for p5 sketches written in the web editor style.
@@ -18,7 +19,7 @@ import { useP5 } from "./useP5";
  *   }}
  * </P5WebEditorSketch>
  */
-export default function P5WebEditorSketch({ children, width = 400, height = 300 }) {
+export default function P5WebEditorSketch({ children, width = 400, height = 300, onMount }) {
   const { containerRef } = useP5((p) => {
     // Call the sketch definition function
     children(p);
@@ -26,6 +27,13 @@ export default function P5WebEditorSketch({ children, width = 400, height = 300 
     // Return empty object since methods are already assigned directly to p
     return {};
   });
+
+  // Call onMount after the container is set
+  useEffect(() => {
+    if (onMount && containerRef.current) {
+      onMount(containerRef.current);
+    }
+  }, [onMount]);
 
   return <div ref={containerRef}></div>;
 }
