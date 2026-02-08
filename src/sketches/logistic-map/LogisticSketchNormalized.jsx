@@ -25,19 +25,16 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
         // --------------------------
         // Model + layout
         // --------------------------
-        let P0 = 2.0; // fixed initial population
+        let x_0 = 0.1;  // normalized initial value (instead of P0)
         let r = 1;  // initial r
-        let K = 750;  // initial carrying capacity
         let maxN = 15;
 
         // Leave room for sliders on top
         let plot = { x: 60, y: 75, w: 390, h: 240 };
 
-        let isDraggingP0 = false;
-
         // Fixed y-axis scale
         let yMin = 0;
-        let yMax = 1200;
+        let yMax = 1.25
 
         const samples = 260;
 
@@ -51,7 +48,6 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
         // UI
         // --------------------------
         let rSlider;
-        let kSlider;
 
         // slider layout (so labels can sit to the right)
         const sliderW = 240;
@@ -78,11 +74,6 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
           rSlider.style("width", sliderW + "px");
           rSlider.position(sliderX, 40);
           styleSlider(rSlider);
-
-          kSlider = p.createSlider(100, 1000, K, 1);
-          kSlider.style("width", sliderW + "px");
-          kSlider.position(sliderX, 70);
-          styleSlider(kSlider);
         };
 
         function styleSlider(sl) {
@@ -99,17 +90,13 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
 
           drawGrid();
           drawAxes();
-
-          // carrying capacity reference line (red dotted)
           drawCarryingCapacityLine();
 
           if (isVisibleRef.current) {
             const newR = rSlider ? rSlider.value() : r;
-            const newK = kSlider ? kSlider.value() : K;
 
-            if (Math.abs(newR - r) > 1e-6 || Math.abs(newK - K) > 1e-6) {
+            if (Math.abs(newR - r) > 1e-6 ) {
               r = newR;
-              K = newK;
               recomputeTargets(false);
             }
           }
@@ -120,16 +107,39 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
           drawSliderLabelsRight();
         };
 
+        function drawCarryingCapacityLine() {
+          const y = mapPtoY(1);
+          const xL = plot.x;
+          const xR = plot.x + plot.w;
+
+          // red dotted line
+          p.stroke(255, 70, 70, 210);
+          p.strokeWeight(1.5);
+
+          const dash = 6;
+          const gap = 6;
+          for (let x = xL; x < xR; x += dash + gap) {
+            p.line(x, y, Math.min(x + dash, xR), y);
+          }
+
+          // small label "K" near left
+          p.noStroke();
+          p.fill(255, 120, 120, 220);
+          p.textSize(12);
+          p.textAlign(p.LEFT, p.BOTTOM);
+          p.text("1", xL + 4, y - 4);
+        }
+
         // --------------------------
         // Logistic map (P units):
         // P_{n+1} = r P_n (1 - P_n/K)
         // --------------------------
         function computeValues() {
           values = [];
-          let P = P0;
+          let x = x_0;
           for (let n = 0; n <= maxN; n++) {
-            values.push(P);
-            P = r * P * (1 - P / K) + P;
+            values.push(x);
+            x = r * x * (1 - x) + x;
           }
         }
 
@@ -275,7 +285,7 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
             p.line(x0 - 6, y, x0, y);
             p.noStroke();
             p.fill(255, 165);
-            p.text(Math.round(v), x0 - 10, y);
+            p.text(v.toFixed(2), x0 - 10, y);
           }
 
           // axis labels
@@ -289,31 +299,8 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
           p.translate(plot.x - 50, plot.y + plot.h / 2);
           p.rotate(-p.HALF_PI);
           p.textAlign(p.CENTER, p.TOP);
-          p.text("Population (Pₙ)", 0, 0);
+          p.text("xₙ", 0, 0);
           p.pop();
-        }
-
-        function drawCarryingCapacityLine() {
-          const y = mapPtoY(K);
-          const xL = plot.x;
-          const xR = plot.x + plot.w;
-
-          // red dotted line
-          p.stroke(255, 70, 70, 210);
-          p.strokeWeight(1.5);
-
-          const dash = 6;
-          const gap = 6;
-          for (let x = xL; x < xR; x += dash + gap) {
-            p.line(x, y, Math.min(x + dash, xR), y);
-          }
-
-          // small label "K" near left
-          p.noStroke();
-          p.fill(255, 120, 120, 220);
-          p.textSize(12);
-          p.textAlign(p.LEFT, p.BOTTOM);
-          p.text("K", xL + 4, y - 4);
         }
 
         function drawCurve() {
@@ -329,36 +316,14 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
         function drawPoints() {
           for (let n = 0; n <= maxN; n++) {
             const po = pts[n];
+            p.noStroke();
+            p.fill(255, 40);
+            p.ellipse(po.x, po.y, 15, 15);
 
-            // Check if hovering over P0
-            const isHoveringP0 = (n === 0 && p.dist(p.mouseX, p.mouseY, po.x, po.y) < 15);
-
-            if (n === 0) {
-              // P0 point - make it look draggable
-              const dragColor = isDraggingP0 ? curveColor : (isHoveringP0 ? "#ff6b9d" : "#ffffff");
-              p.fill(dragColor);
-              p.noStroke();
-              p.circle(po.x, po.y, isDraggingP0 ? 12 : (isHoveringP0 ? 10 : 8));
-              
-              // Change cursor when hovering
-              if (isHoveringP0 || isDraggingP0) {
-                p.cursor('ns-resize'); // up-down resize cursor
-              }
-            } else {
-                p.noStroke();
-                p.fill(255, 40);
-                p.ellipse(po.x, po.y, 15, 15);
-
-                p.fill(255);
-                p.ellipse(po.x, po.y, 8, 8);
-              }
-              drawPSubscriptLabel(po.x, po.y - 18, n);
-          }
-
-          // Reset cursor if not hovering
-          if (!isDraggingP0 && p.dist(p.mouseX, p.mouseY, pts[0].x, pts[0].y) >= 15) {
-            p.cursor(p.ARROW);
-          }
+            p.fill(255);
+            p.ellipse(po.x, po.y, 8, 8);
+            drawPSubscriptLabel(po.x, po.y - 18, n);
+            }
         }
 
         function drawPSubscriptLabel(x, y, n) {
@@ -396,7 +361,6 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
 
           // Slider center y's (based on slider y + ~3px)
           p.text(`r = ${r.toFixed(2)}`, labelX, 26);
-          p.text(`K = ${Math.round(K)}`, labelX, 52);
         }
 
         // --------------------------
@@ -416,40 +380,6 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
           return p.lerp(plot.y + plot.h - 10, topEdge, t);
         }
 
-        p.mousePressed = () => {
-          // Check if mouse is near the first point (P0)
-          if (pts && pts.length > 0) {
-            const p0x = pts[0].x;
-            const p0y = pts[0].y;
-            const d = p.dist(p.mouseX, p.mouseY, p0x, p0y);
-            
-            if (d < 15) { // 15px hit radius
-              isDraggingP0 = true;
-              return false; // prevent default
-            }
-          }
-        };
-
-        p.mouseDragged = () => {
-          if (isDraggingP0) {
-            // Constrain mouse to plot area vertically
-            const minY = plot.y;
-            const maxY = plot.y + plot.h;
-            const clampedY = p.constrain(p.mouseY, minY, maxY);
-            
-            // Convert mouse Y back to population value
-            // Inverse of mapPtoY function
-            const t = p.map(clampedY, plot.y + plot.h - 10, 30, 0, 1);
-            P0 = p.constrain(t * (yMax - yMin) + yMin, yMin, yMax);
-            
-            recomputeTargets(false);
-            return false;
-          }
-        };
-
-        p.mouseReleased = () => {
-          isDraggingP0 = false;
-        };
       }}
     </P5WebEditorSketch>
   );

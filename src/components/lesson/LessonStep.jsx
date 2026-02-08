@@ -31,9 +31,9 @@ export default function LessonStep({
           }
         }
       },
-      { 
+      {
         threshold: 0.1,
-        rootMargin: "-10% 0px -40% 0px"  // Triggers when element enters middle 60% of viewport
+        rootMargin: "-10% 0px -50% 0px"  // Triggers when element enters middle 60% of viewport
       }
     );
 
@@ -41,7 +41,7 @@ export default function LessonStep({
     return () => obs.disconnect();
   }, []);
 
-  const cls = mode === "split" 
+  const cls = mode === "split"
     ? "lesson-step is-split"
     : mode === "left"
       ? "lesson-step is-left"
@@ -50,10 +50,10 @@ export default function LessonStep({
   // For split/sticky-split mode, wrap each child in lesson-fade separately to maintain grid
   // For centered/left mode, wrap all children together
   const content = (mode === "split")
-    ? Array.isArray(children) 
+    ? Array.isArray(children)
       ? children.map((child, i) => (
-          <div key={i} className="lesson-fade">{child}</div>
-        ))
+        <div key={i} className="lesson-fade">{child}</div>
+      ))
       : <div className="lesson-fade">{children}</div>
     : <div className="lesson-fade">{children}</div>;
 
