@@ -1,192 +1,202 @@
 import P5WebEditorSketch from "../../components/lesson/P5WebEditorSketch";
 
-export default function ExponentialRabbitSketch({ width = 500, height = 450 }) {
-  return (
-    <P5WebEditorSketch width={width} height={height}>
-      {(p) => {
-        let rabbits = [];
-        let generation = 0;
-        let nextButton;
+export default function ExponentialRabbitSketch({ width = 500, height = 380 }) {
+    return (
+        <P5WebEditorSketch width={width} height={height}>
+            {(p) => {
+                let rabbits = [];
+                let generation = 0;
+                let nextButton;
 
-        // Island blob settings (oval)
-        let islandCX, islandCY;
-        let islandRX, islandRY; // radii
+                // Island blob settings (oval)
+                let islandCX, islandCY;
+                let islandRX, islandRY; // radii
 
-        p.setup = function() {
-            p.createCanvas(500, 450);
-            p.textFont("system-ui");
+                // Styling to match other sketches
+                const BG = "#0f1218";
+                const rabbitColor = "#e1e1e1ce";
 
-            islandCX = p.width / 2;
-            islandCY = p.height / 2 + 10;
-            islandRX = p.width * 0.42;
-            islandRY = p.height * 0.32;
+                p.setup = function () {
+                    p.createCanvas(500, 380);
+                    p.textFont("system-ui");
 
-            rabbits.push(new Rabbit());
-            rabbits.push(new Rabbit());
+                    islandCX = p.width / 2;
+                    islandCY = p.height / 2;
+                    islandRX = p.width * 0.38;
+                    islandRY = p.height * 0.30;
 
-            nextButton = p.createButton("Next Generation");
-            nextButton.mousePressed(nextGeneration);
-            styleButton();
-            positionButton();
-        }
+                    rabbits.push(new Rabbit());
+                    rabbits.push(new Rabbit());
 
-        p.windowResized = function() {
-            positionButton();
-        }
+                    nextButton = p.createButton("Next Generation");
+                    nextButton.mousePressed(nextGeneration);
+                    styleButton();
+                    positionButton();
+                }
 
-        function positionButton() {
-        // Center button at bottom
-            nextButton.position(p.width / 2 - 85, p.height - 40);
-        }
+                p.windowResized = function () {
+                    positionButton();
+                }
 
-        function styleButton() {
-            nextButton.style("background-color", "#ffffff");
-            nextButton.style("color", "#0f1218");
-            nextButton.style("border", "none");
-            nextButton.style("padding", "12px 20px");
-            nextButton.style("border-radius", "999px");
-            nextButton.style("font-size", "18px");
-            nextButton.style("font-family", "Segoe UI");
-            nextButton.style("cursor", "pointer");
-            nextButton.style("transition", "transform 0.08s ease, background-color 0.2s ease");
+                function positionButton() {
+                    // Position button at bottom center
+                    nextButton.position(p.width / 2 - 60, p.height - 35);
+                }
 
-            nextButton.mouseOver(() => nextButton.style("background-color", "#e9eefc"));
-            nextButton.mouseOut(() => {
-                nextButton.style("background-color", "#ffffff");
-                nextButton.style("transform", "scale(1)");
-        });
+                function styleButton() {
+                    // Match the minimal style of sliders in other sketches
+                    nextButton.style("background-color", "rgba(198, 107, 255, 0.15)");
+                    nextButton.style("color", rabbitColor);
+                    nextButton.style("border", "1px solid rgba(198, 107, 255, 0.3)");
+                    nextButton.style("padding", "6px 16px");
+                    nextButton.style("border-radius", "6px");
+                    nextButton.style("font-size", "18px");
+                    nextButton.style("font-family", "system-ui");
+                    nextButton.style("cursor", "pointer");
+                    nextButton.style("transition", "all 0.2s ease");
 
-        // Use native DOM events for press, without overriding p5 mousePressed(nextGeneration)
-        nextButton.elt.addEventListener("mousedown", () => {
-            nextButton.style("transform", "scale(0.98)");
-        });
-        nextButton.elt.addEventListener("mouseup", () => {
-            nextButton.style("transform", "scale(1)");
-        });
-        nextButton.elt.addEventListener("mouseleave", () => {
-            nextButton.style("transform", "scale(1)");
-        });
-        }
+                    nextButton.mouseOver(() => {
+                        nextButton.style("background-color", "rgba(198, 107, 255, 0.25)");
+                        nextButton.style("border-color", "rgba(198, 107, 255, 0.5)");
+                    });
+                    nextButton.mouseOut(() => {
+                        nextButton.style("background-color", "rgba(198, 107, 255, 0.15)");
+                        nextButton.style("border-color", "rgba(198, 107, 255, 0.3)");
+                        nextButton.style("transform", "scale(1)");
+                    });
 
-        function disableButton() {
-            nextButton.attribute("disabled", "");
-            nextButton.style("background-color", "#555");
-            nextButton.style("color", "#999");
-            nextButton.style("cursor", "not-allowed");
-            nextButton.style("transform", "scale(1)");
-        }
+                    // Use native DOM events for press
+                    nextButton.elt.addEventListener("mousedown", () => {
+                        nextButton.style("transform", "scale(0.97)");
+                    });
+                    nextButton.elt.addEventListener("mouseup", () => {
+                        nextButton.style("transform", "scale(1)");
+                    });
+                    nextButton.elt.addEventListener("mouseleave", () => {
+                        nextButton.style("transform", "scale(1)");
+                    });
+                }
 
-        p.draw = function() {
-            p.background("#0f1218");
+                function disableButton() {
+                    nextButton.attribute("disabled", "");
+                    nextButton.style("background-color", "rgba(255, 255, 255, 0.05)");
+                    nextButton.style("color", "rgba(255, 255, 255, 0.3)");
+                    nextButton.style("border-color", "rgba(255, 255, 255, 0.1)");
+                    nextButton.style("cursor", "not-allowed");
+                    nextButton.style("transform", "scale(1)");
+                }
 
-            drawTopInfo();
+                p.draw = function () {
+                    p.background(BG);
 
-            for (let r of rabbits) {
-                r.applySeparation(rabbits);
-                r.moveAndConstrain();  // keep inside rounded blob
-                r.display();
-            }
-        }
+                    drawTopInfo();
 
-        class Rabbit {
-            constructor() {
-                // spawn inside island
-                this.pos = randomPointInIsland();
-                let angle = p.random(p.TWO_PI);
-                this.vel = p.createVector(p.cos(angle), p.sin(angle)).mult(0.3);
-            }
-
-            applySeparation(others) {
-                let force = p.createVector(0, 0);
-                let personalSpace = 18;
-
-                for (let other of others) {
-                    if (other === this) continue;
-                    let d = this.pos.dist(other.pos);
-                    if (d < personalSpace && d > 0) {
-                        let repel = this.pos.copy().sub(other.pos);
-                        repel.normalize();
-                        repel.div(d); // stronger when closer
-                        force.add(repel);
+                    for (let r of rabbits) {
+                        r.applySeparation(rabbits);
+                        r.moveAndConstrain();  // keep inside rounded blob
+                        r.display();
                     }
                 }
 
-                force.limit(0.22);
-                this.vel.add(force);
-            }
+                class Rabbit {
+                    constructor() {
+                        // spawn inside island
+                        this.pos = randomPointInIsland();
+                        let angle = p.random(p.TWO_PI);
+                        this.vel = p.createVector(p.cos(angle), p.sin(angle)).mult(0.3);
+                    }
 
-            moveAndConstrain() {
-                this.pos.add(this.vel);
-                this.vel.mult(0.94); // friction = smooth
+                    applySeparation(others) {
+                        let force = p.createVector(0, 0);
+                        let personalSpace = 18;
 
-                // If outside island oval, pull back in
-                if (!insideIsland(this.pos.x, this.pos.y)) {
-                // Project back toward center until inside (simple + stable)
-                let dir = p.createVector(islandCX, islandCY).sub(this.pos);
-                dir.setMag(0.01);
-                for (let i = 0; i < 30; i++) {
-                    this.pos.add(dir);
-                    if (insideIsland(this.pos.x, this.pos.y)) break;
+                        for (let other of others) {
+                            if (other === this) continue;
+                            let d = this.pos.dist(other.pos);
+                            if (d < personalSpace && d > 0) {
+                                let repel = this.pos.copy().sub(other.pos);
+                                repel.normalize();
+                                repel.div(d); // stronger when closer
+                                force.add(repel);
+                            }
+                        }
+
+                        force.limit(0.22);
+                        this.vel.add(force);
+                    }
+
+                    moveAndConstrain() {
+                        this.pos.add(this.vel);
+                        this.vel.mult(0.94); // friction = smooth
+
+                        // If outside island oval, pull back in
+                        if (!insideIsland(this.pos.x, this.pos.y)) {
+                            // Project back toward center until inside (simple + stable)
+                            let dir = p.createVector(islandCX, islandCY).sub(this.pos);
+                            dir.setMag(0.01);
+                            for (let i = 0; i < 30; i++) {
+                                this.pos.add(dir);
+                                if (insideIsland(this.pos.x, this.pos.y)) break;
+                            }
+                            // damp velocity on boundary hits
+                            this.vel.mult(0.6);
+                        }
+                    }
+
+                    display() {
+                        p.fill(rabbitColor);
+                        p.noStroke();
+
+                        // body
+                        p.ellipse(this.pos.x, this.pos.y, 10, 10);
+                        // ears
+                        p.ellipse(this.pos.x - 3, this.pos.y - 7, 4, 8);
+                        p.ellipse(this.pos.x + 3, this.pos.y - 7, 4, 8);
+                    }
                 }
-                // damp velocity on boundary hits
-                this.vel.mult(0.6);
+
+                function nextGeneration() {
+                    if (generation >= 8) return; // safety check
+
+                    let newRabbits = [];
+                    for (let r of rabbits) newRabbits.push(new Rabbit());
+                    rabbits = rabbits.concat(newRabbits);
+
+                    generation++;
+
+                    if (generation >= 8) {
+                        disableButton();
+                    }
                 }
-            }
-
-            display() {
-                p.fill(255);
-                p.noStroke();
-
-                // body
-                p.ellipse(this.pos.x, this.pos.y, 10, 10);
-                // ears
-                p.ellipse(this.pos.x - 3, this.pos.y - 7, 4, 8);
-                p.ellipse(this.pos.x + 3, this.pos.y - 7, 4, 8);
-            }
-        }
-
-        function nextGeneration() {
-            if (generation >= 8) return; // safety check
-
-            let newRabbits = [];
-            for (let r of rabbits) newRabbits.push(new Rabbit());
-            rabbits = rabbits.concat(newRabbits);
-
-            generation++;
-
-            if (generation >= 8) {
-                disableButton();
-            }
-        }
 
 
-        function drawTopInfo() {
-            p.fill(255);
-            p.noStroke();
-            p.textSize(22);
-            p.textAlign(p.CENTER, p.CENTER);
+                function drawTopInfo() {
+                    p.fill(rabbitColor);
+                    p.noStroke();
+                    p.textSize(20);
+                    p.textAlign(p.CENTER, p.CENTER);
 
-            let infoText = `Month: ${generation}        Population: ${rabbits.length}`;
-            p.text(infoText, p.width / 2, 28);
-        }
+                    let infoText = `Month: ${generation}        Population: ${rabbits.length}`;
+                    p.text(infoText, p.width / 2, 22);
+                }
 
-        function insideIsland(x, y) {
-            // ellipse equation: ((x-cx)/rx)^2 + ((y-cy)/ry)^2 <= 1
-            let dx = (x - islandCX) / islandRX;
-            let dy = (y - islandCY) / islandRY;
-            let noise = p.random(0,1);
-            return dx * dx + dy * dy + noise <= 1;
-        }
+                function insideIsland(x, y) {
+                    // ellipse equation: ((x-cx)/rx)^2 + ((y-cy)/ry)^2 <= 1
+                    let dx = (x - islandCX) / islandRX;
+                    let dy = (y - islandCY) / islandRY;
+                    let noise = p.random(0, 1);
+                    return dx * dx + dy * dy + noise <= 1;
+                }
 
-        function randomPointInIsland() {
-            // rejection sample inside ellipse
-            while (true) {
-                let x = p.random(islandCX - islandRX, islandCX + islandRX);
-                let y = p.random(islandCY - islandRY, islandCY + islandRY);
-                if (insideIsland(x, y)) return p.createVector(x, y);
-            }
-        }
-      }}
-    </P5WebEditorSketch>
-  );
+                function randomPointInIsland() {
+                    // rejection sample inside ellipse
+                    while (true) {
+                        let x = p.random(islandCX - islandRX, islandCX + islandRX);
+                        let y = p.random(islandCY - islandRY, islandCY + islandRY);
+                        if (insideIsland(x, y)) return p.createVector(x, y);
+                    }
+                }
+            }}
+        </P5WebEditorSketch>
+    );
 }
