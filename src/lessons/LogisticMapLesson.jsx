@@ -9,9 +9,10 @@ import ExponentialInteractiveSketch from "../sketches/logistic-map/ExponentialIn
 import ExponentialInteractiveSketchNegative from "../sketches/logistic-map/ExponentialIteractiveSketchNegative";
 import LogisticSketch from "../sketches/logistic-map/LogisticSketch";
 import LogisticSketchNormalized from "../sketches/logistic-map/LogisticSketchNormalized";
-import LogisticSketchPeriodDoubling from "../sketches/logistic-map/LogisticSketchPeriodDoubling";
+import LogisticSketchOrbit2 from "../sketches/logistic-map/LogisticSketchOrbit2";
 import AlgebraicStepper from "../components/lesson/AlgebraicStepper";
 import logisticAlgebra from "./logisticAlgebra";
+import FullWidthVizBox from "../components/lesson/FullWidthVizBox";
 
 export default function LogisticMapLesson() {
   return (
@@ -440,11 +441,44 @@ export default function LogisticMapLesson() {
         </VizBox>
       </LessonStep>
 
-      <LessonStep mode="left" style={{ marginBottom: '0px' }}>
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
         <p>
           With the simplification out of the way, it's time to tackle the strange behavior we observed when <Math inline={true}>r</Math> is large.
         </p>
       </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          We'll start by looking at <Math inline={true}>r</Math> values between 1.75 and 2.3.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-20px' }}>
+        <p>
+          In the graph below, we show 50 generations. This allows us to see the long-term behavior more clearly.
+        </p>
+      </LessonStep>
+
+      <StickyScrollSection
+        stickyContent={
+          <VizBox>
+            <LogisticSketchOrbit2 />
+          </VizBox>
+        }
+      >
+        <LessonStep mode="left" rootMargin="-10% 0px -60% 0px">
+          <p> When <Math inline={true}>r</Math> is below 2, we have the usual equilibrium at 1. </p>
+        </LessonStep>
+
+        <LessonStep mode="left" rootMargin="-10% 0px -50% 0px">
+          <p> But as soon as <Math inline={true}>r</Math> crosses 2, the population starts to oscillate between two values. </p>
+        </LessonStep>
+
+        <LessonStep mode="left" rootMargin="-10% 0px -40% 0px">
+          <p> The population has entered a <em>period-2 orbit</em>. </p>
+        </LessonStep>
+      </StickyScrollSection>
+
 
       <LessonStep mode="left" style={{ marginBottom: '500px' }}>
         <p>
@@ -454,6 +488,3 @@ export default function LogisticMapLesson() {
     </LessonPage>
   );
 }
-
-//Each month, we take the current population and use a rule to determine the next month's population.
-//This is called a <em>map</em>. If we repeat this process over and over, we get what is called an <em>iterated map</em>.

@@ -3,7 +3,8 @@ import { useEffect, useRef } from "react";
 export default function LessonStep({
   children,
   mode = "centered", // "centered" | "split"
-  style
+  style,
+  rootMargin = "-10% 0px -50% 0px" // Default triggers when element enters middle 60% of viewport
 }) {
   const ref = useRef(null);
 
@@ -33,13 +34,13 @@ export default function LessonStep({
       },
       {
         threshold: 0.1,
-        rootMargin: "-10% 0px -50% 0px"  // Triggers when element enters middle 60% of viewport
+        rootMargin: rootMargin
       }
     );
 
     obs.observe(el);
     return () => obs.disconnect();
-  }, []);
+  }, [rootMargin]);
 
   const cls = mode === "split"
     ? "lesson-step is-split"

@@ -41,9 +41,12 @@ body {
   background: var(--card);
   backdrop-filter: blur(10px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
-  overflow: hidden;                 /* <-- IMPORTANT: clips the image */
-  display: flex;                    /* <-- IMPORTANT */
-  flex-direction: column;           /* <-- IMPORTANT */
+  overflow: hidden;
+  /* <-- IMPORTANT: clips the image */
+  display: flex;
+  /* <-- IMPORTANT */
+  flex-direction: column;
+  /* <-- IMPORTANT */
   transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
 }
 
@@ -97,11 +100,14 @@ body {
 
 .proj-thumb img {
   width: 100%;
-  height: 120px;          /* controls image size */
-  object-fit: cover;      /* prevents stretching */
+  height: 120px;
+  /* controls image size */
+  object-fit: cover;
+  /* prevents stretching */
   border-radius: 14px;
   border: 1px solid var(--border);
-  display: block;         /* removes baseline gaps */
+  display: block;
+  /* removes baseline gaps */
 }
 
 
@@ -173,7 +179,7 @@ body {
   z-index: 1;
 }
 
-.proj-card-link{
+.proj-card-link {
   text-decoration: none;
   color: inherit;
   display: block;
@@ -181,30 +187,35 @@ body {
   grid-column: span 6;
 }
 
-.proj-card-link .proj-card{
+.proj-card-link .proj-card {
   height: 100%;
 }
 
 
 /* Technical Writing cards: center everything consistently */
 .writing-card {
-  aspect-ratio: 4 / 3;          /* responsive “fixed shape” */
+  aspect-ratio: 4 / 3;
+  /* responsive “fixed shape” */
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  grid-column: span 3; /* default: same as others (2 per row) */
+  grid-column: span 3;
+  /* default: same as others (2 per row) */
 }
 
 .writing-card .proj-top {
   display: flex;
   flex-direction: column;
-  align-items: center;   /* centers the oval/tag */
-  gap: 10px;             /* uniform spacing between tag/title/desc */
+  align-items: center;
+  /* centers the oval/tag */
+  gap: 10px;
+  /* uniform spacing between tag/title/desc */
 }
 
 .writing-card .proj-tag {
-  margin: 0;             /* prevent random margins */
+  margin: 0;
+  /* prevent random margins */
 }
 
 .writing-card .proj-title,
@@ -218,7 +229,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;  /* vertical centering */
+  justify-content: center;
+  /* vertical centering */
   gap: 10px;
   text-align: center;
 }
@@ -247,6 +259,7 @@ body {
   background-attachment: fixed;
   min-height: 100vh;
 }
+
 /* Title / subtitle */
 .lesson-hero {
   text-align: center;
@@ -275,7 +288,8 @@ body {
 /* Step wrapper (shared) */
 .lesson-step {
   margin: 0 auto;
-  padding: 15px 0; /* vertical rhythm */
+  padding: 15px 0;
+  /* vertical rhythm */
   max-width: 1000px;
 }
 
@@ -315,7 +329,8 @@ body {
   opacity: 0.95;
 }
 
-.lesson-step h2, .lesson-step h3 {
+.lesson-step h2,
+.lesson-step h3 {
   margin: 0 0 18px;
   letter-spacing: -0.01em;
 }
@@ -335,6 +350,7 @@ body {
     opacity: 0;
     transform: translateY(18px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -371,6 +387,25 @@ body {
   min-height: 280px;
 }
 
+.full-width-viz-box {
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  min-height: 280px;
+  max-width: calc(100vw - 80px);
+  /* Full width with 40px margins on each side */
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .full-width-viz-box {
+    max-width: calc(100vw - 40px);
+    /* Smaller margins on mobile */
+  }
+}
+
 /* KaTeX tweaks (optional) */
 .katex {
   font-size: 1.05em;
@@ -386,6 +421,3 @@ body {
   margin-left: 20px;
   font-size: 20px;
 }
-
-
-

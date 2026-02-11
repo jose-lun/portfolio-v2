@@ -128,7 +128,7 @@ function EquationDisplay({ equation, prevEquation, highlights = [] }) {
 
     const thisOccurrenceIndex = occurrenceIndices[cleanContent];
 
-    console.log(`Checking token: "${tokenContent}" (clean: "${cleanContent}"), occurrence index: ${thisOccurrenceIndex}`);
+    // console.log(`Checking token: "${tokenContent}" (clean: "${cleanContent}"), occurrence index: ${thisOccurrenceIndex}`);
 
     let matchColor = '#e9ecf2';
     let foundMatch = false;
@@ -138,24 +138,24 @@ function EquationDisplay({ equation, prevEquation, highlights = [] }) {
 
       if (cleanContent === cleanPattern) {
         foundMatch = true;  // ✅ Set this as soon as pattern matches!
-        console.log(`  ✓ Pattern match! pattern="${h.pattern}" (clean: "${cleanPattern}"), target index=${h.index}, current index=${thisOccurrenceIndex}`);
+        // console.log(`  ✓ Pattern match! pattern="${h.pattern}" (clean: "${cleanPattern}"), target index=${h.index}, current index=${thisOccurrenceIndex}`);
 
         if (h.index === undefined || h.index === thisOccurrenceIndex) {
           matchColor = h.color;
-          console.log(`    → COLOR MATCH! Using color: ${h.color}`);
+          // console.log(`    → COLOR MATCH! Using color: ${h.color}`);
           break;  // Break after finding a matching index
         } else {
-          console.log(`    → Index mismatch, continuing to check next entry`);
+          // console.log(`    → Index mismatch, continuing to check next entry`);
         }
       }
     }
 
     if (foundMatch) {
       occurrenceIndices[cleanContent]++;
-      console.log(`  Incrementing "${cleanContent}" counter to ${occurrenceIndices[cleanContent]}`);
+      // console.log(`  Incrementing "${cleanContent}" counter to ${occurrenceIndices[cleanContent]}`);
     }
 
-    console.log(`  Final color: ${matchColor}\n`);
+    // console.log(`  Final color: ${matchColor}\n`);
     return matchColor;
   };
 
@@ -223,8 +223,8 @@ function EquationDisplay({ equation, prevEquation, highlights = [] }) {
                 const coloredNum = colorFractionPart(token.numerator, occurrenceIndices);
                 const coloredDen = colorFractionPart(token.denominator, occurrenceIndices);
 
-                console.log('Fraction numerator result:', coloredNum);
-                console.log('Fraction denominator result:', coloredDen);
+                // console.log('Fraction numerator result:', coloredNum);
+                // console.log('Fraction denominator result:', coloredDen);
 
                 return (
                   <motion.span
