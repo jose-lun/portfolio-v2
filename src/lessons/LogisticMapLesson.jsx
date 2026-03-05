@@ -459,7 +459,7 @@ export default function LogisticMapLesson() {
         </p>
       </LessonStep>
 
-      <StickyScrollSection
+      {/* <StickyScrollSection
         stickyContent={
           <VizBox>
             <LogisticSketchOrbit2 />
@@ -477,7 +477,7 @@ export default function LogisticMapLesson() {
         <LessonStep mode="left" rootMargin="-10% 0px -40% 0px">
           <p> The population has entered a <em>period-2 orbit</em>. </p>
         </LessonStep>
-      </StickyScrollSection>
+      </StickyScrollSection> */}
 
 
       <LessonStep mode="left" style={{ marginBottom: '500px' }}>

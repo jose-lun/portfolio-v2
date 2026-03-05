@@ -81,6 +81,7 @@ export default function ExponentialGrowthInteractiveSketch({ width = 500, height
         };
 
         p.draw = function () {
+
           p.background(BG);
 
           drawGrid();
@@ -314,11 +315,11 @@ export default function ExponentialGrowthInteractiveSketch({ width = 500, height
         }
 
         function mapPtoY(P) {
-            let t = (P - yMin) / (yMax - yMin);
-            // allow t > 1 so it can go above the plot
-            // (optional: still clamp below so negatives don't go weird)
-            t = Math.max(t, 0);
-            return p.lerp(plot.y + plot.h - 10, plot.y + 10, t);
+          let t = (P - yMin) / (yMax - yMin);
+          // allow t > 1 so it can go above the plot
+          // (optional: still clamp below so negatives don't go weird)
+          t = Math.max(t, 0);
+          return p.lerp(plot.y + plot.h - 10, plot.y + 10, t);
         }
       }}
     </P5WebEditorSketch>

@@ -3,6 +3,7 @@ import { useRef } from "react";
 
 export default function LogisticSketchOrbit2({ width = 500, height = 450 }) {
     const isVisibleRef = useRef(false);
+    const p5InstanceRef = useRef(null);
 
     return (
         <P5WebEditorSketch
@@ -11,17 +12,25 @@ export default function LogisticSketchOrbit2({ width = 500, height = 450 }) {
             onMount={(el) => {
                 const obs = new IntersectionObserver(
                     ([entry]) => {
-                        if (entry.isIntersecting) {
-                            isVisibleRef.current = true;
-                            obs.disconnect();
+                        const wasVisible = isVisibleRef.current;
+                        isVisibleRef.current = entry.isIntersecting;
+
+                        // Start/stop the draw loop based on visibility
+                        if (p5InstanceRef.current) {
+                            if (entry.isIntersecting && !wasVisible) {
+                                p5InstanceRef.current.loop();
+                            } else if (!entry.isIntersecting && wasVisible) {
+                                p5InstanceRef.current.noLoop();
+                            }
                         }
                     },
-                    { threshold: 0.4, rootMargin: "0px 0px" }
+                    { threshold: 0.1, rootMargin: "100px" }
                 );
                 obs.observe(el);
             }}
         >
             {(p) => {
+                p5InstanceRef.current = p;
                 // --------------------------
                 // Model + layout
                 // --------------------------
@@ -77,6 +86,10 @@ export default function LogisticSketchOrbit2({ width = 500, height = 450 }) {
                     rSlider.style("width", sliderW + "px");
                     rSlider.position(sliderX, 35);
                     styleSlider(rSlider);
+                    // Start paused if not visible
+                    if (!isVisibleRef.current) {
+                        p.noLoop();
+                    }
                 };
 
                 function styleSlider(sl) {
@@ -89,12 +102,14 @@ export default function LogisticSketchOrbit2({ width = 500, height = 450 }) {
                 }
 
                 p.draw = function () {
+
                     p.background(BG);
 
                     drawGrid();
                     drawAxes();
                     drawEquilibriumLines();
 
+                    // Only update values when visible
                     if (isVisibleRef.current) {
                         const newR = rSlider ? rSlider.value() : r;
 

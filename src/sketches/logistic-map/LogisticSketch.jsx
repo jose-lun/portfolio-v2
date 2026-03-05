@@ -95,6 +95,7 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
         }
 
         p.draw = function () {
+
           p.background(BG);
 
           drawGrid();
@@ -339,20 +340,20 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
               p.fill(dragColor);
               p.noStroke();
               p.circle(po.x, po.y, isDraggingP0 ? 12 : (isHoveringP0 ? 10 : 8));
-              
+
               // Change cursor when hovering
               if (isHoveringP0 || isDraggingP0) {
                 p.cursor('ns-resize'); // up-down resize cursor
               }
             } else {
-                p.noStroke();
-                p.fill(255, 40);
-                p.ellipse(po.x, po.y, 15, 15);
+              p.noStroke();
+              p.fill(255, 40);
+              p.ellipse(po.x, po.y, 15, 15);
 
-                p.fill(255);
-                p.ellipse(po.x, po.y, 8, 8);
-              }
-              drawPSubscriptLabel(po.x, po.y - 18, n);
+              p.fill(255);
+              p.ellipse(po.x, po.y, 8, 8);
+            }
+            drawPSubscriptLabel(po.x, po.y - 18, n);
           }
 
           // Reset cursor if not hovering
@@ -422,7 +423,7 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
             const p0x = pts[0].x;
             const p0y = pts[0].y;
             const d = p.dist(p.mouseX, p.mouseY, p0x, p0y);
-            
+
             if (d < 15) { // 15px hit radius
               isDraggingP0 = true;
               return false; // prevent default
@@ -436,12 +437,12 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
             const minY = plot.y;
             const maxY = plot.y + plot.h;
             const clampedY = p.constrain(p.mouseY, minY, maxY);
-            
+
             // Convert mouse Y back to population value
             // Inverse of mapPtoY function
             const t = p.map(clampedY, plot.y + plot.h - 10, 30, 0, 1);
             P0 = p.constrain(t * (yMax - yMin) + yMin, yMin, yMax);
-            
+
             recomputeTargets(false);
             return false;
           }

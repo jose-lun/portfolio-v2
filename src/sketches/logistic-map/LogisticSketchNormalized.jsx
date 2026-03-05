@@ -86,6 +86,7 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
         }
 
         p.draw = function () {
+
           p.background(BG);
 
           drawGrid();
@@ -95,7 +96,7 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
           if (isVisibleRef.current) {
             const newR = rSlider ? rSlider.value() : r;
 
-            if (Math.abs(newR - r) > 1e-6 ) {
+            if (Math.abs(newR - r) > 1e-6) {
               r = newR;
               recomputeTargets(false);
             }
@@ -323,7 +324,7 @@ export default function LogisticMapInteractiveSketch({ width = 500, height = 380
             p.fill(255);
             p.ellipse(po.x, po.y, 8, 8);
             drawPSubscriptLabel(po.x, po.y - 18, n);
-            }
+          }
         }
 
         function drawPSubscriptLabel(x, y, n) {
