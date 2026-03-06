@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export default function FullWidthVizBox({ title, subtitle, showLabel = true, children }) {
+export default function FullWidthVizBox({ title, subtitle, showLabel = true, transparent = false, children }) {
     const ref = useRef(null);
 
     useEffect(() => {
@@ -38,7 +38,7 @@ export default function FullWidthVizBox({ title, subtitle, showLabel = true, chi
     return (
         <div className="lesson-step" ref={ref} style={{ maxWidth: '1000px', padding: '40px 0', margin: '0 auto' }}>
             <div className="lesson-fade">
-                <div className="full-width-viz-box">
+                <div className="full-width-viz-box" style={transparent ? { background: 'transparent', border: 'none', backdropFilter: 'none' } : {}}>
                     {(title || subtitle) && (
                         <div style={{ padding: "18px 18px 0", opacity: 0.85 }}>
                             {title && (

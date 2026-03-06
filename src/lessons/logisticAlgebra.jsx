@@ -66,7 +66,7 @@ const logisticAlgebra = [
     highlights: [
       { pattern: "K", color: "#df2323ff", index: 0 },
       { pattern: "K", color: "#df2323ff", index: 1 },
-      { pattern: "K", color: "#df2323ff", index: 2 },
+      { pattern: "K", color: "#261e1eff", index: 2 },
     ]
   },
   {

@@ -1,7 +1,16 @@
 import P5WebEditorSketch from "../../components/lesson/P5WebEditorSketch";
 import { useRef } from "react";
 
-export default function LogisticSketchOrbit2({ width = 500, height = 450 }) {
+export default function LogisticSketchOrbit({
+    width = 500,
+    height = 400,
+    rInitial = 1.75,
+    rMax = 2.3,
+    maxN = 50,
+    startN = 0,  // Start displaying from this month
+    x0 = 0.1,
+    stepSize = 0.01
+}) {
     const isVisibleRef = useRef(false);
     const p5InstanceRef = useRef(null);
 
@@ -34,15 +43,16 @@ export default function LogisticSketchOrbit2({ width = 500, height = 450 }) {
                 // --------------------------
                 // Model + layout
                 // --------------------------
-                let x_0 = 0.1;  // normalized initial value
-                let r = 1.75;  // initial r (range 1.5 to 2.5)
-                let maxN = 50;
+                let x_0 = x0;  // normalized initial value
+                let step_size = stepSize
+                let r = rInitial;  // initial r
+                const rMin = rInitial;
 
                 // Larger plot area for wide sketch
                 let plot = { x: 80, y: 80, w: width - 160, h: height - 150 };
 
                 // Fixed y-axis scale
-                let yMin = 0;
+                let yMin = 0.45;
                 let yMax = 1.25;
 
                 const samples = 250;
@@ -82,7 +92,7 @@ export default function LogisticSketchOrbit2({ width = 500, height = 450 }) {
 
                     sliderX = p.width / 2 - sliderW / 2;
 
-                    rSlider = p.createSlider(1.75, 2.3, r, 0.01);
+                    rSlider = p.createSlider(rMin, rMax, r, step_size);
                     rSlider.style("width", sliderW + "px");
                     rSlider.position(sliderX, 35);
                     styleSlider(rSlider);
@@ -213,8 +223,13 @@ export default function LogisticSketchOrbit2({ width = 500, height = 450 }) {
                 function computeValues() {
                     values = [];
                     let x = x_0;
-                    for (let n = 0; n <= maxN; n++) {
-                        values.push(x);
+
+                    // Run the simulation from 0 to startN + maxN
+                    // But only store values from startN onwards
+                    for (let n = 0; n <= startN + maxN; n++) {
+                        if (n >= startN) {
+                            values.push(x);
+                        }
                         x = r * x * (1 - x) + x;
                     }
                 }
@@ -346,14 +361,13 @@ export default function LogisticSketchOrbit2({ width = 500, height = 450 }) {
                         p.strokeWeight(1);
                         p.line(x, y0, x, y0 + 6);
                         p.noStroke();
-                        p.text(n, x, y0 + 8);
+                        p.text(startN + n, x, y0 + 8);  // Display actual month number
                     }
 
                     // y ticks
-                    const ticks = 5;
+                    const yTickValues = [0.5, 0.75, 1.0, 1.25];
                     p.textAlign(p.RIGHT, p.CENTER);
-                    for (let i = 0; i <= ticks; i++) {
-                        const v = (i / ticks) * yMax;
+                    for (let v of yTickValues) {
                         const y = mapPtoY(v);
                         p.stroke(255, 70);
                         p.strokeWeight(1);

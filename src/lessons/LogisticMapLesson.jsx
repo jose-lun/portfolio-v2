@@ -9,10 +9,14 @@ import ExponentialInteractiveSketch from "../sketches/logistic-map/ExponentialIn
 import ExponentialInteractiveSketchNegative from "../sketches/logistic-map/ExponentialIteractiveSketchNegative";
 import LogisticSketch from "../sketches/logistic-map/LogisticSketch";
 import LogisticSketchNormalized from "../sketches/logistic-map/LogisticSketchNormalized";
-import LogisticSketchOrbit2 from "../sketches/logistic-map/LogisticSketchOrbit2";
+import LogisticSketchOrbit from "../sketches/logistic-map/LogisticSketchOrbit";
 import AlgebraicStepper from "../components/lesson/AlgebraicStepper";
 import logisticAlgebra from "./logisticAlgebra";
 import FullWidthVizBox from "../components/lesson/FullWidthVizBox";
+import BifurcationDiagram from "../sketches/logistic-map/BifurcationDiagram";
+import LogisticGrowthSketch from "../sketches/logistic-map/LogisticGrowthSketch";
+import BifurcationArt from "../sketches/logistic-map/BifurcationArt";
+
 
 export default function LogisticMapLesson() {
   return (
@@ -400,9 +404,7 @@ export default function LogisticMapLesson() {
         <p>
           We define a new variable <Math inline={true}>x_n</Math> to represent the population at month <Math inline={true}>n</Math> divided by the carrying capacity:
         </p>
-        <p>
-          <Math>{"x_n = \\frac{P_n}{K}"}</Math>
-        </p>
+        <Math>{"x_n = \\frac{P_n}{K}"}</Math>
       </LessonStep>
 
       <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
@@ -449,20 +451,26 @@ export default function LogisticMapLesson() {
 
       <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
         <p>
-          We'll start by looking at <Math inline={true}>r</Math> values between 1.75 and 2.3.
+          Going forward, we will focus on the long-term behavior of the population, ignoring the initial fluctuations.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          This way, we can clearly see the different patterns of behavior that emerge as we change <Math inline={true}>r</Math>.
         </p>
       </LessonStep>
 
       <LessonStep mode="left" style={{ marginBottom: '-20px' }}>
         <p>
-          In the graph below, we show 50 generations. This allows us to see the long-term behavior more clearly.
+          In the graph below, we plot the population from month 50 to month 100.
         </p>
       </LessonStep>
 
-      {/* <StickyScrollSection
+      <StickyScrollSection
         stickyContent={
           <VizBox>
-            <LogisticSketchOrbit2 />
+            <LogisticSketchOrbit rInitial={1.75} rMax={2.3} maxN={50} startN={50} />
           </VizBox>
         }
       >
@@ -477,13 +485,215 @@ export default function LogisticMapLesson() {
         <LessonStep mode="left" rootMargin="-10% 0px -40% 0px">
           <p> The population has entered a <em>period-2 orbit</em>. </p>
         </LessonStep>
-      </StickyScrollSection> */}
+      </StickyScrollSection>
 
+      <StickyScrollSection
+        stickyContent={
+          <VizBox>
+            <LogisticSketchOrbit rInitial={2.3} rMax={2.54} maxN={50} startN={50} />
+          </VizBox>
+        }
+      >
+        <LessonStep mode="left" rootMargin="-10% 0px -60% 0px">
+          <p> Things get even more interesting as <Math inline={true}>r</Math> continues increasing. </p>
+        </LessonStep>
 
-      <LessonStep mode="left" style={{ marginBottom: '500px' }}>
+        <LessonStep mode="left" rootMargin="-10% 0px -50% 0px">
+          <p> At <Math inline={true}>{"r \\approx 2.45"}</Math>, the population starts to oscillate between four values. </p>
+        </LessonStep>
+
+        <LessonStep mode="left" rootMargin="-10% 0px -40% 0px">
+          <p> We have entered a <em>period-4 orbit</em>. </p>
+        </LessonStep>
+      </StickyScrollSection>
+
+      <LessonStep mode="left" style={{ marginBottom: '-20px' }}>
         <p>
+          Then things get really wild.
         </p>
       </LessonStep>
+
+      <StickyScrollSection
+        stickyContent={
+          <VizBox>
+            <LogisticSketchOrbit rInitial={2.54} rMax={2.57} maxN={50} stepSize={0.001} startN={50} />
+          </VizBox>
+        }
+      >
+        <LessonStep mode="left" rootMargin="-10% 0px -60% 0px">
+          <p> As we increase <Math inline={true}>r</Math> from 2.54 to 2.57, we see period-8 orbits, then period-16 orbits, and so on. </p>
+        </LessonStep>
+
+        <LessonStep mode="left" rootMargin="-10% 0px -50% 0px">
+          <p> This behavior is known as <em>period doubling</em>.</p>
+        </LessonStep>
+      </StickyScrollSection>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          There is a nice way to visualize this process of period doubling.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          You'll notice that each value of <Math inline={true}>r</Math> leads to a specific equilibrium value (or values) of the population. For example,
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <ul style={{ lineHeight: '2' }}>
+          <li>
+            When <Math inline={true}>r = 1.5</Math>, the equilibrium value is 1.
+          </li>
+          <li>
+            When <Math inline={true}>r = 2.1</Math>, the population oscillates between 0.8 and 1.1.
+          </li>
+          <li>
+            When <Math inline={true}>r = 2.5</Math>, the population oscillates between 0.6, 1.2, 0.7, and 1.25.
+          </li>
+        </ul>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          If we let <Math inline={true}>r</Math> range across the x-axis and plot the corresponding equilibrium values on the y-axis, we get something called a <em>stability diagram</em>.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          Drag the slider below to construct the stability diagram for <Math inline={true}>r</Math> values between 1.9 and 2.8.
+        </p>
+      </LessonStep>
+
+      <FullWidthVizBox>
+        <BifurcationDiagram />
+      </FullWidthVizBox>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px', marginTop: '-50px' }}>
+        <p>
+          We now clearly see that each period doubling creates a fork in the diagram, known as a <em>bifurcation</em>.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          Another name for the stability diagram is the <em>bifurcation diagram</em>.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          It's also clear to see that after <Math inline={true}>{'r \\approx 2.57'}</Math>, the population begins to bounce around in a seemingly random way.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          After <Math inline={true}>{'r \\approx 2.57'}</Math>, there no more periodic orbits, no more bifurcations, and no more equilibrium values at all.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '0px' }}>
+        <p>
+          The system has entered a state that is known as <em>chaos</em>.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="split">
+        <div>
+          <p>
+            For example, consider a population with <Math inline={true}>r = 3</Math>.
+          </p>
+          <p>
+            Despite the fact that the population follows a completely deterministic rule, there seems to be no predictable pattern at all.
+          </p>
+        </div>
+        <VizBox>
+          <LogisticGrowthSketch />
+        </VizBox>
+      </LessonStep>
+
+      <LessonStep mode="centered" style={{ marginTop: '50px' }}>
+        <h2>Part 4: Final Questions</h2>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          At first glance, chaos may seem like the end of the road for understanding our rabbit population.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          Once we let <Math inline={true}>r</Math> get large enough, the population becomes completely unpredictable.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          Indeed, this will be the end of our exploration for now.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          However, there are still many fascinating questions to consider about this iterated map, including:
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <ul style={{ lineHeight: '2' }}>
+          <li>
+            Why does period doubling occur?
+          </li>
+        </ul>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <ul style={{ lineHeight: '2' }}>
+          <li>
+            Why does it occur at specific values of <Math inline={true}>r</Math>? (<Math inline={true}>{'r \\approx 2, 2.45, 2.54, 2.57, ...'}</Math>)
+          </li>
+        </ul>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <ul style={{ lineHeight: '2' }}>
+          <li>
+            Is there a pattern to these values? (<em>hint:</em> there is!)
+          </li>
+        </ul>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <ul style={{ lineHeight: '2' }}>
+          <li>
+            Does this type of period doubling occur in other iterated maps, or is it unique to our logistic map?
+          </li>
+        </ul>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          I'll leave these questions unanswered for now, but I encourage you to continue exploring them on your own.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="left" style={{ marginBottom: '-50px' }}>
+        <p>
+          For now, I hope this lesson has given you a taste of how chaos arises in simple mathematical models.
+        </p>
+      </LessonStep>
+
+      <LessonStep mode="centered" style={{ marginTop: '50px', marginBottom: '-100px' }}>
+        <h2>Thank you for reading!</h2>
+      </LessonStep>
+
+      <FullWidthVizBox transparent={true}>
+        <BifurcationArt width={900} height={500} />
+      </FullWidthVizBox>
 
     </LessonPage>
   );
