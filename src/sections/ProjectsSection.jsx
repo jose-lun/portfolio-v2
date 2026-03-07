@@ -1,28 +1,24 @@
-import { href } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Reveal from "../components/Reveal";
+import bifurcationImg from "../assets/bifurcation.png";
+import taylorImg from "../assets/taylor.png";
 
 const INTERACTIVE_LESSONS = [
   {
-    title: "The Logistic Map",
+    title: "The Logistic Growth Model",
     tag: "Interactive Lesson",
-    desc: "Cobweb plots, bifurcation diagrams, and intuition for period-doubling.",
-    img: "https://picsum.photos/seed/chaos/900/700",
+    desc: "How a population model leads to bifurcations, period-doubling, and chaos.",
+    img: bifurcationImg,
     type: "lesson",
     href: "/lessons/logistic-map",
   },
   {
-    title: "RL Racecar",
+    title: "Taylor Series: Intuition and Applications",
     tag: "Interactive Lesson",
-    desc: "See Q-learning learn to drive with interpretable value/policy visuals.",
-    img: "https://picsum.photos/seed/rl/900/700",
+    desc: "How to approximate any function with polynomials, and why it works.",
+    img: taylorImg,
     type: "lesson",
-  },
-  {
-    title: "Taylor Series (Rebuild Here)",
-    tag: "Interactive Lesson",
-    desc: "Build a function from local polynomials and visualize approximation error.",
-    img: "https://picsum.photos/seed/taylor2/900/700",
-    type: "lesson",
+    href: "/lessons/taylor-series",
   },
 ];
 
@@ -91,6 +87,7 @@ const TECHNICAL_WRITING = [
 
 function ProjectCard({ title, tag, desc, img, href, type }) {
   const isWriting = type === "writing";
+  const isInternal = href && href.startsWith("/");
 
   const Card = (
     <div className="proj-card">
@@ -102,13 +99,23 @@ function ProjectCard({ title, tag, desc, img, href, type }) {
 
       {img ? (
         <div className="proj-thumb">
-          <img src={img} alt="" />
+          <img src={img} alt={title} />
         </div>
       ) : null}
     </div>
   );
 
-  return href ? (
+  if (!href) return Card;
+
+  if (isInternal && !isWriting) {
+    return (
+      <a className={`proj-card-link`} href={href} target="_blank" rel="noreferrer">
+        {Card}
+      </a>
+    );
+  }
+
+  return (
     <a
       className={`proj-card-link ${isWriting ? "writing-card" : ""}`}
       href={href}
@@ -117,10 +124,7 @@ function ProjectCard({ title, tag, desc, img, href, type }) {
     >
       {Card}
     </a>
-  ) : (
-    Card
   );
-
 }
 
 

@@ -16,7 +16,7 @@ export function useP5(sketchDef, deps = []) {
 
     const sketch = (p) => {
       const methods = sketchDef(p);
-      
+
       // Assign all methods to p5 instance
       Object.keys(methods).forEach(key => {
         p[key] = methods[key];
@@ -27,7 +27,21 @@ export function useP5(sketchDef, deps = []) {
 
     return () => {
       if (p5Instance.current) {
-        p5Instance.current.remove();
+        const p = p5Instance.current;
+
+        // Remove all p5 DOM elements before removing the p5 instance
+        // This includes sliders, buttons, inputs, etc.
+        if (p._elements) {
+          // p._elements is an array that p5 uses to track DOM elements
+          for (let i = p._elements.length - 1; i >= 0; i--) {
+            if (p._elements[i] && p._elements[i].remove) {
+              p._elements[i].remove();
+            }
+          }
+        }
+
+        // Now remove the p5 instance itself
+        p.remove();
         p5Instance.current = null;
       }
     };

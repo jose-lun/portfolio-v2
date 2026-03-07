@@ -21,10 +21,10 @@ import BifurcationArt from "../sketches/logistic-map/BifurcationArt";
 export default function LogisticMapLesson() {
   return (
     <LessonPage
-      title="The Logistic Map"
+      title="The Logistic Growth Model"
       subtitle="How a simple model of population growth leads to chaos."
     >
-      <LessonStep mode="centered">
+      <LessonStep mode="centered" style={{ marginTop: '200px' }}>
         <h2>Part 1: Rabbits on an island</h2>
       </LessonStep>
       <LessonStep mode="left" style={{ marginBottom: '-50px' }}>

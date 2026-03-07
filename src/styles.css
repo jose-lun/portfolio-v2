@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@200;600&display=swap');
+@import "mafs/core.css";
+@import "mafs/font.css";
+@import "computer-modern/cmu-serif.css";
+
 :root {
   --bg: #0b0d12;
   --text: #e9ecf2;
@@ -421,4 +426,187 @@ body {
   padding-left: 40px;
   margin-left: 20px;
   font-size: 20px;
+}
+
+/* TAYLOR SERIES LESSON CUSTOM STYLES */
+
+.taylor-project {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0;
+  padding-top: 60px;
+  padding-bottom: 100px;
+
+  background-color: #f0f0f0;
+  color: #000;
+  font-family: 'League Spartan', sans-serif;
+}
+
+.taylor-project h1 {
+  color: #3e497a;
+  font-size: 35px;
+  font-weight: 600;
+  text-align: center;
+}
+
+
+.taylor-project img {
+  width: 700px;
+  border-radius: 10px;
+  color: #98a5df
+}
+
+.taylor-project svg {
+  font-size: 60px;
+  color: #3e497a;
+}
+
+.taylor-project p {
+  font-size: 30px;
+  /* font-family: "CMU Serif", serif; */
+  font-style: none;
+  color: black;
+}
+
+.taylor-lesson p {
+  font-size: 25px;
+  margin-top: 20px;
+  margin-left: 10%;
+  margin-right: 10%;
+  text-align: left;
+  line-height: 1.8;
+}
+
+.taylor-lesson h1 {
+  text-align: center;
+  margin-bottom: 50px;
+  margin-top: 50px;
+}
+
+.taylor-italic {
+  font-style: italic;
+}
+
+.taylor-bold {
+  font-weight: 600;
+}
+
+.taylor-mathy {
+  font-size: 0.7em;
+}
+
+.taylor-math {
+  font-family: "CMU Serif", serif;
+  text-align: center;
+}
+
+.taylor-bigmath {
+  font-family: "CMU Serif", serif;
+  text-align: center;
+  font-size: 20px;
+}
+
+.taylor-latexblock {
+  margin-top: 0px;
+}
+
+.taylor-project button {
+  background-color: #292727;
+  color: white;
+  font-size: 25px;
+  font-family: "CMU Serif", serif;
+  padding: 10px 30px;
+  border-radius: 5px;
+  margin: 10px 10px;
+  cursor: pointer;
+}
+
+.taylor-project button:hover {
+  background-color: #463f3f;
+}
+
+.MafsView {
+  --mafs-bg: #292727;
+  --mafs-line-color: #555;
+  --grid-line-subdivision-color: rgb(117, 117, 117);
+  --mafs-approx: rgb(54, 139, 236);
+  --mafs-point: rgb(238, 238, 238);
+  --mafs-approxPoint: rgb(197, 99, 201);
+  border: 8px solid rgb(94, 94, 94);
+  border-radius: 3px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.MafsView text {
+  fill: var(--mafs-fg);
+  cursor: default;
+}
+
+.approx {
+  --mafs-line-color: rgb(133, 10, 10);
+}
+
+.function-input {
+  margin-top: 0px;
+}
+
+math-field {
+  box-sizing: border-box;
+  padding: 0.5em;
+  margin: 0px 20px 0px 10px;
+  font-size: 1em;
+  border-radius: 8px;
+  border: 1px solid #999;
+}
+
+/* Hide the virtual keyboard toggle */
+math-field::part(virtual-keyboard-toggle) {
+  display: none;
+}
+
+/* Hide the menu toggle */
+math-field::part(menu-toggle) {
+  display: none;
+}
+
+
+.modal {
+  position: fixed;
+
+  left: 30%;
+  right: 30%;
+  top: 40%;
+
+  width: auto;
+
+  border: 0px solid #011627;
+  border-radius: 1em;
+  padding: 10px;
+
+  background-color: #FDFFFC;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  color: #011627;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
 }
