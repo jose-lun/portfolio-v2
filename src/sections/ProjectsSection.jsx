@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { href } from "react-router-dom";
 import Reveal from "../components/Reveal";
 import bifurcationImg from "../assets/bifurcation.png";
 import taylorImg from "../assets/taylor.png";
+import SigmaProjectShowcase from "../components/SigmaProjectShowcase";
 
 const INTERACTIVE_LESSONS = [
   {
@@ -29,6 +30,7 @@ const OTHER_PROJECTS = [
     desc: "Group-based habit scoring, leaderboards, rubric builder, history charts.",
     img: "https://picsum.photos/seed/sigma/900/700",
     type: "app",
+    href: "https://sigma-bc106.web.app/"
   },
 ];
 
