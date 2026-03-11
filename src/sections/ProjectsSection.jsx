@@ -12,7 +12,7 @@ const INTERACTIVE_LESSONS = [
     img: bifurcationImg,
     type: "lesson",
     href: "/lessons/logistic-map",
-    tech: "React, KaTeX, p5.js",
+    tech: "React, KaTeX, p5.js. Note: optimized for desktop.",
   },
   {
     title: "Taylor Series: Intuition and Applications",
@@ -21,7 +21,7 @@ const INTERACTIVE_LESSONS = [
     img: taylorImg,
     type: "lesson",
     href: "/lessons/taylor-series",
-    tech: "React, KaTeX, Mafs, MathLive",
+    tech: "React, KaTeX, Mafs, MathLive. Note: optimized for desktop.",
   },
 ];
 
