@@ -1,4 +1,4 @@
-import { href } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Reveal from "../components/Reveal";
 import bifurcationImg from "../assets/bifurcation.png";
 import taylorImg from "../assets/taylor.png";
@@ -12,6 +12,7 @@ const INTERACTIVE_LESSONS = [
     img: bifurcationImg,
     type: "lesson",
     href: "/lessons/logistic-map",
+    tech: "React, KaTeX, p5.js",
   },
   {
     title: "Taylor Series: Intuition and Applications",
@@ -20,76 +21,65 @@ const INTERACTIVE_LESSONS = [
     img: taylorImg,
     type: "lesson",
     href: "/lessons/taylor-series",
-  },
-];
-
-const OTHER_PROJECTS = [
-  {
-    title: "Sigma Habit Tracker",
-    tag: "Full-Stack App",
-    desc: "Group-based habit scoring, leaderboards, rubric builder, history charts.",
-    img: "https://picsum.photos/seed/sigma/900/700",
-    type: "app",
-    href: "https://sigma-bc106.web.app/"
+    tech: "React, KaTeX, Mafs, MathLive",
   },
 ];
 
 const TECHNICAL_WRITING = [
-  // Put your PDFs in /public/papers/ and link like "/papers/<file>.pdf"
   {
-    title: "The Road Repair Scheduling Problem",
+    title: "Road Repair Scheduling",
     tag: "Discrete Optimization",
-    desc: "Problem framing, constraints, and optimization approach.",
+    desc: "JHU 605.618: Discrete Optimization",
     href: "/papers/road-maintenance.pdf",
     type: "writing",
   },
   {
-    title: "Q-Learning for Navigating Grids",
+    title: "Q-Learning for Navigation",
     tag: "Reinforcement Learning",
-    desc: "Environment design, Q-learning details, results, and analysis.",
+    desc: "JHU 605.649: Machine Learning",
     href: "/papers/rl-racecar.pdf",
     type: "writing",
   },
   {
     title: "Condensed K-NN Classifier",
     tag: "Machine Learning",
-    desc: "K-NN overview, condensation algorithm, and performance evaluation.",
+    desc: "JHU 605.649: Machine Learning",
     href: "/papers/knn-classifier.pdf",
     type: "writing",
   },
   {
-    title: "The Effect of Pruning on Decision Trees",
+    title: "Decision Tree Pruning",
     tag: "Machine Learning",
-    desc: "Pruning techniques, bias-variance tradeoff, and empirical results.",
+    desc: "JHU 605.649: Machine Learning",
     href: "/papers/decision-tree-pruning.pdf",
     type: "writing",
   },
   {
-    title: "ML Models for Financial Forecasting",
+    title: "ML for Financial Forecasting",
     tag: "Machine Learning",
-    desc: "Model selection, feature engineering, and evaluation metrics.",
+    desc: "JHU 625.740: Data Mining",
     href: "/papers/ml-financial-forecasting.pdf",
     type: "writing",
   },
   {
     title: "The Fitzhugh-Nagumo Model",
     tag: "Dynamical Systems",
-    desc: "Model derivation, phase plane analysis, and simulation results.",
+    desc: "JHU 615:765: Chaos Theory",
     href: "/papers/fitzhugh-nagumo.pdf",
     type: "writing",
   },
   {
-    title: "CNNs for Alzheimer's Detection",
+    title: "Alzheimer's Detection",
     tag: "Deep Learning",
-    desc: "Model architecture, training process, and accuracy assessment.",
-    href: "/papers/alzheimers-detection.pdf",
+    desc: "UCB CS 182: Deep Learning",
+    href: "https://medium.com/@ndonthi/predicting-your-alzheimers-before-you-re-an-old-timer-53d444d29022",
     type: "writing",
   },
 ];
 
-function ProjectCard({ title, tag, desc, img, href, type }) {
+function ProjectCard({ title, tag, desc, img, href, type, tech }) {
   const isWriting = type === "writing";
-  const isInternal = href && href.startsWith("/");
+  const isInternal = href && href.startsWith("/") && !isWriting;
 
   const Card = (
     <div className="proj-card">
@@ -104,16 +94,22 @@ function ProjectCard({ title, tag, desc, img, href, type }) {
           <img src={img} alt={title} />
         </div>
       ) : null}
+
+      {tech ? (
+        <div className="proj-tech">
+          <span className="proj-tech-label">Tech Stack:</span> {tech}
+        </div>
+      ) : null}
     </div>
   );
 
   if (!href) return Card;
 
-  if (isInternal && !isWriting) {
+  if (isInternal) {
     return (
-      <a className={`proj-card-link`} href={href} target="_blank" rel="noreferrer">
+      <Link className="proj-card-link" to={href}>
         {Card}
-      </a>
+      </Link>
     );
   }
 
@@ -129,8 +125,9 @@ function ProjectCard({ title, tag, desc, img, href, type }) {
   );
 }
 
-
 function Group({ title, subtitle, items, centered }) {
+  const isWriting = title === "Technical Writing";
+
   return (
     <div style={{ marginTop: 40 }}>
       <h3
@@ -161,7 +158,10 @@ function Group({ title, subtitle, items, centered }) {
         </p>
       )}
 
-      <div className="proj-grid" style={{ marginTop: 18 }}>
+      <div
+        className={`proj-grid ${isWriting ? "proj-grid-writing" : ""}`}
+        style={{ marginTop: 18 }}
+      >
         {items.map((p) => (
           <ProjectCard key={p.title} {...p} />
         ))}
@@ -169,7 +169,6 @@ function Group({ title, subtitle, items, centered }) {
     </div>
   );
 }
-
 
 export default function ProjectsSection() {
   return (
@@ -182,12 +181,35 @@ export default function ProjectsSection() {
           centered
         />
 
-        <Group
-          title="Other Projects"
-          subtitle="Apps and engineering work beyond lessons."
-          items={OTHER_PROJECTS}
-          centered
-        />
+        <div style={{ marginTop: 56 }}>
+          <h3
+            style={{
+              margin: 0,
+              fontSize: 30,
+              letterSpacing: "-0.01em",
+              textAlign: "center",
+            }}
+          >
+            Apps
+          </h3>
+
+          <p
+            style={{
+              marginTop: 10,
+              marginBottom: 30,
+              opacity: 0.8,
+              lineHeight: 1.5,
+              maxWidth: 760,
+              marginLeft: "auto",
+              marginRight: "auto",
+              textAlign: "center",
+            }}
+          >
+            Full-stack projects with custom workflows, data modeling, and user-facing interfaces.
+          </p>
+
+          <SigmaProjectShowcase />
+        </div>
 
         <Group
           title="Technical Writing"

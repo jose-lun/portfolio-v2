@@ -35,67 +35,88 @@ const slides = [
 
 export default function SigmaProjectShowcase() {
     const [index, setIndex] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
     const slide = slides[index];
 
+    const goToSlide = (nextIndex) => {
+        if (isAnimating) return;
+
+        setIsAnimating(true);
+
+        setTimeout(() => {
+            setIndex(nextIndex);
+            setIsAnimating(false);
+        }, 180);
+    };
+
     const prevSlide = () => {
-        setIndex((prev) => (prev - 1 + slides.length) % slides.length);
+        goToSlide((index - 1 + slides.length) % slides.length);
     };
 
     const nextSlide = () => {
-        setIndex((prev) => (prev + 1) % slides.length);
+        goToSlide((index + 1) % slides.length);
     };
 
     return (
-        <div className="sigma-showcase">
-            <div className="sigma-showcase-top">
-                <div className="sigma-showcase-copy">
-                    <div className="proj-tag">React + Firebase App</div>
-                    <h3 className="sigma-title">Social Habit Tracker</h3>
-                    <p className="sigma-summary">
-                        A multi-user habit tracking app for building custom scoring rubrics,
-                        logging daily behavior, and comparing progress across groups over time.
-                    </p>
-
-                    <div className="sigma-slide-copy">
-                        <div className="sigma-slide-heading">{slide.heading}</div>
-                        <p>{slide.text}</p>
+        <div className="proj-card sigma-card">
+            <div className="sigma-card-top">
+                <div className="sigma-top-row">
+                    <div className="sigma-top-left">
                     </div>
 
-                    <div className="sigma-actions">
+                    <div className="sigma-top-center">
+                        <div className="proj-title sigma-title">Social Habit Tracker</div>
+                    </div>
+
+                    <div className="sigma-top-right">
                         <a
                             href="https://sigma-bc106.web.app/"
                             target="_blank"
                             rel="noreferrer"
-                            className="sigma-button"
+                            className="proj-tag sigma-live-button sigma-pill"
+                            style={{ background: "rgba(42, 204, 99, 0.61)" }}
                         >
                             Open Live App
                         </a>
                     </div>
                 </div>
 
-                <div className="sigma-showcase-media">
-                    <div className="sigma-image-frame">
+                <p className="proj-desc sigma-summary">
+                    A multi-user habit tracking app for building custom scoring rubrics,
+                    logging daily behavior, and comparing progress across groups over time.
+                </p>
+            </div>
+
+            <div className="sigma-card-main">
+                <div className="sigma-card-left">
+                    <div className={`sigma-slide-copy ${isAnimating ? "sigma-fade-out" : "sigma-fade-in"}`}>
+                        <div className="sigma-slide-heading">{slide.heading}</div>
+                        <p>{slide.text}</p>
+                    </div>
+                </div>
+
+                <div className="sigma-card-right">
+                    <div className={`sigma-image-frame ${isAnimating ? "sigma-fade-out" : "sigma-fade-in"}`}>
                         <img src={slide.img} alt={slide.heading} />
                     </div>
 
                     <div className="sigma-controls">
-                        <button onClick={prevSlide} className="sigma-arrow">
+                        <button onClick={prevSlide} className="sigma-arrow" aria-label="Previous slide">
                             ←
                         </button>
                         <span className="sigma-indicator">
                             {index + 1} / {slides.length}
                         </span>
-                        <button onClick={nextSlide} className="sigma-arrow">
+                        <button onClick={nextSlide} className="sigma-arrow" aria-label="Next slide">
                             →
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div className="sigma-tech-box">
-                <span className="sigma-tech-label">Tech Stack:</span> React, Firebase
-                Authentication, Firestore, JavaScript, charting components, responsive
-                CSS
+            <div className="proj-tech sigma-tech">
+                <span className="proj-tech-label">Tech Stack: </span> React, Firebase
+                Authentication, Firestore, JavaScript, Responsive CSS
             </div>
         </div>
     );
